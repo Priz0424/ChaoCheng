@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@700;900&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>朝誠汽車 - 首頁</title>
+  <style>
+    html {
+      scroll-behavior: smooth;
+      height: 100%;
+      overflow-y: scroll;
+    }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      height: 100%;
+      color: var(--text-dark);
+    }
+    :root {
+      --primary: #002060;
+      --accent: #d4af37;
+      --bg-light: #fff;
+      --bg-section: #fefbf5;
+      --text-dark: #333;
+    }
+    /* Apply brand font to headings and subtitles */
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Noto Sans TC', sans-serif;
+      font-weight: 700;
+    }
+    .text-accent, .contact-section h5 {
+      font-weight: 900;
+    }
+    /* Certificate-style section */
+    .certificate-section {
+      padding: 4rem 0;
+      background-color: var(--bg-section);
+    }
+    .certificate-section .certificate {
+      /* border: 3px dashed #333; */
+      border: 1px solid #ddd;
+      padding: 2rem;
+      background-color: #fff;
+      max-width: 800px;
+      margin: 0 auto;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+    /* Experience list layout within certificate */
+    .certificate-section .certificate ul {
+      column-count: 1;
+      column-gap: 2rem;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .certificate-section .certificate ul li {
+      position: relative;
+      padding-left: 1.5rem;
+      margin-bottom: 0.75rem;
+      line-height: 1.6;
+    }
+    .certificate-section .certificate ul li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: #d4af37;
+      font-size: 1.2em;
+      line-height: 1.6;
+    }
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 2000;
+      background: var(--primary);
+      color: #fff;
+      padding: 0.5rem 2rem;
+      width: 100%;
+      /* Remove max-width and margin, let header be full width */
+      /* Layout handled by header-inner */
+    }
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    /* 巢狀選單樣式 */
+    nav ul.menu {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      gap: 1rem;
+    }
+    nav ul.menu > li {
+      position: relative;
+    }
+    nav ul.menu li a {
+      text-decoration: none;
+      color: #fff;
+    }
+    nav ul.menu li ul {
+      position: absolute;
+      display: none;
+      background: var(--bg-light);
+      padding: 1rem;
+      list-style: none;
+      top: 100%;
+      left: 0;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      z-index: 2100;
+      min-width: 160px;
+    }
+    nav ul.menu li:hover ul {
+      display: block;
+    }
+    nav ul.menu li ul li {
+      padding: 0.25rem 1rem;
+      white-space: nowrap;
+    }
+    nav ul.menu li ul li a {
+      color: #000;
+    }
+    nav ul.menu > li.has-submenu > a::after {
+      content: " ▼";
+      font-size: 0.7em;
+    }
+    .hero { background:url('hero.jpg') center/cover no-repeat; color:#fff; padding:4rem 2rem; text-align:center; }
+    .hero h1 { font-size:2.5rem; margin-bottom:1rem; }
+    main { padding:2rem; max-width:1200px; margin:0 auto; }
+    footer { background:#f4f4f4; text-align:center; padding:1rem; font-size:0.9rem; }
+    .carousel {
+      /* 置於導覽列下方，精確控制與導覽列(nav)之間的間距 */
+      position: relative;
+      top: 0;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      margin-top: 0;
+    }
+    .floating-buttons {
+      position: fixed;
+      top: 35%;
+      right: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 1000;
+    }
+    .floating-buttons a {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #fff;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      transition: transform 0.2s;
+    }
+    .floating-buttons a:hover {
+      transform: scale(1.1);
+    }
+    .floating-buttons img {
+      width: 60%;
+      height: 60%;
+    }
+    .honor-banner {
+      background-color: var(--primary);
+      text-align: center;
+      padding: 1.5rem 1rem;
+    }
+    .honor-banner img {
+      max-width: 320px;
+      margin: 0 0.5rem;
+      vertical-align: middle;
+    }
+    .honor-section {
+      background-color: transparent;
+      color: #fff;
+      padding: 0 0 2rem 0;
+    }
+    /* Blue background for honor-left and honor-right */
+    .honor-left,
+    .honor-right {
+      background-color: transparent;
+      color: var(--text-dark);
+      padding: 1rem;
+      border-radius: 0.5rem;
+    }
+    .honor-section .honor-content {
+      background: transparent;
+      padding: 0;
+      margin-top: 1rem;
+    }
+    .honor-content {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 1rem;
+      gap: 2rem;
+    }
+    .honor-left img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+    .honor-right {
+      flex: 1 1 500px;
+      color: #333;
+    }
+    .honor-right p {
+      line-height: 1.8;
+      margin-bottom: 1rem;
+    }
+    .honor-right h2 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+    .honor-right h3 {
+      margin-top: 1rem;
+      color: var(--primary);
+    }
+    .honor-right ul {
+      list-style: none;
+      padding-left: 0;
+    }
+    .honor-right li {
+      margin-bottom: 0.5rem;
+    }
+    .honor-right li::before {
+      content: "✔️ ";
+      margin-right: 0.5rem;
+      color: #f4b400;
+    }
+    .honor-caption {
+      text-align: center;
+      font-size: 1rem;
+      margin-top: 0.5rem;
+      color: #444;
+    }
+    .honor-left {
+      position: relative;
+      display: inline-block;
+    }
+    .honor-left .honor-caption {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      color: #fff;
+      padding: 0.5rem;
+      font-size: 0.9rem;
+      text-align: center;
+      margin: 0;
+    }
+    /* Reduce spacing between badge/text and following images */
+    .container-fluid.bg-light.py-2 {
+      padding-top: 0.5rem !important;
+      padding-bottom: 0.5rem !important;
+      margin-bottom: 0; 
+    }
+    .container-fluid.bg-light.py-2 + .container-fluid.py-5.bg-light {
+      padding-top: 0.5rem !important;
+      margin-top: 0 !important;
+    }
+
+    @media (min-width: 992px) {
+      .navbar .dropdown-menu {
+        display: none;
+      }
+      .navbar .dropdown:hover .dropdown-menu {
+        display: block;
+        margin-top: 0;
+      }
+    }
+    .dropdown-menu {
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.3s ease;
+    }
+
+    .navbar .dropdown:hover .dropdown-menu {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .fade-up {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.6s ease-out;
+    }
+
+    .fade-up.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .nav-link:active {
+      transform: scale(0.96);
+      transition: transform 0.1s ease-in-out;
+    }
+    #page-loader {
+      position: fixed;
+      z-index: 3000;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: opacity 2s ease;
+    }
+    .fade-out {
+      opacity: 0;
+      transition: opacity 0.6s ease;
+    }
+
+    .loader-content {
+      text-align: center;
+      animation: fadeInUp 0.6s ease;
+    }
+
+    .loader-content img {
+      width: 100px;
+      margin-bottom: 1rem;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    body.loaded #page-loader {
+      opacity: 0;
+      pointer-events: none;
+    }
+    /* Contact & Pickup section */
+    .contact-section {
+      background-color: var(--bg-light);
+      padding: 3rem 0;
+    }
+    .contact-card {
+      background: #fff;
+      border: none;
+      border-radius: 0.5rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      padding: 2rem;
+      max-width: 400px;
+      flex: 0 0 auto;
+    }
+    /* Contact card hover and accent */
+    .contact-card {
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .contact-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+    }
+    .contact-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    }
+    /* Adjust text styling within cards */
+    .contact-card p {
+      color: #333;
+      margin-bottom: 0.75rem;
+    }
+    .contact-card .h1 {
+      color: var(--primary);
+      font-size: 1.75rem;
+      font-weight: 600;
+    }
+    .contact-card .h4 {
+      color: var(--accent);
+      font-size: 1.25rem;
+      font-weight: 500;
+    }
+    .text-accent {
+      color: var(--accent) !important;
+    }
+    /* Enlarge contact section text */
+    .contact-section h3 {
+      font-size: 2.25rem;
+    }
+    .contact-section h5 {
+      font-size: 1.75rem;
+    }
+    .contact-section p {
+      font-size: 1.125rem;
+    }
+    /* Section title styling */
+    h2.section-title {
+      font-size: 2.5rem;
+      color: var(--primary);
+      text-align: center;
+      margin: 3rem 0 1.5rem;
+    }
+  </style>
+</head>
+<body>
+  <div id="page-loader">
+    <div class="loader-content">
+      <img src="logo.png" alt="朝誠汽車 Logo">
+    </div>
+  </div>
+  <div style="background:#fff;">
+    <header>
+      <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm">
+        <div class="container">
+          <a class="navbar-brand" href="#"><img src="logo.png" alt="朝誠汽車 Logo" style="height: 60px;"></a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="mainNavbar">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="about.html" id="aboutDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">關於我們</a>
+                <ul class="dropdown-menu" aria-labelledby="aboutDropdown">
+                  <li><a class="dropdown-item" href="#aboutSection">關於朝誠</a></li>
+                  <li><a class="dropdown-item" href="environment.html">公司環境</a></li>
+                </ul>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="services.html" id="servicesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">服務項目</a>
+                <ul class="dropdown-menu" aria-labelledby="servicesDropdown">
+                  <li><a class="dropdown-item" href="buy.html">收購流程</a></li>
+                  <li><a class="dropdown-item" href="sell.html">銷售流程</a></li>
+                  <li><a class="dropdown-item" href="import.html">接單進口流程</a></li>
+                  <li><a class="dropdown-item" href="valuation.html">車禍鑑價求償</a></li>
+                  <li><a class="dropdown-item" href="certification.html">汽車認證</a></li>
+                  <li><a class="dropdown-item" href="insurance.html">保險</a></li>
+                  <li><a class="dropdown-item" href="warranty.html">保固</a></li>
+                  <li><a class="dropdown-item" href="loan.html">貸款</a></li>
+                </ul>
+              </li>
+              <li class="nav-item"><a class="nav-link" href="inventory.html">車輛展示</a></li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="knowledge.html" id="knowledgeDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">汽車小知識</a>
+                <ul class="dropdown-menu" aria-labelledby="knowledgeDropdown">
+                  <li><a class="dropdown-item" href="news.html">最新消息</a></li>
+                  <li><a class="dropdown-item" href="trivia.html">冷知識解密</a></li>
+                  <li><a class="dropdown-item" href="appraisal.html">事故車鑑定鑑價</a></li>
+                </ul>
+              </li>
+              <li class="nav-item"><a class="nav-link" href="testimonials.html">客人見證</a></li>
+              <li class="nav-item"><a class="nav-link" href="#contactSection">聯絡我們</a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+  </div>
+  <div id="mainCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="carousel1.jpg" class="d-block w-100" alt="輪播圖1">
+      </div>
+      <div class="carousel-item">
+        <img src="carousel2.jpg" class="d-block w-100" alt="輪播圖2">
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#mainCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">上一張</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#mainCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">下一張</span>
+    </button>
+  </div>
+  <section class="honor-section">
+    <div class="honor-banner">
+      <img src="honor-left.png" alt="推薦圖左" class="fade-up">
+      <img src="honor-right.png" alt="推薦圖右" class="fade-up">
+    </div>
+    <div class="honor-content fade-up" id="aboutSection" style="margin-top: -1rem;">
+      <div class="honor-left fade-up">
+        <img src="award-people.jpg" alt="合照圖">
+        <div class="honor-caption">2020.03.28 鄭文燦市長來店訪視</div>
+      </div>
+      <div class="honor-right fade-up">
+        <h2 style="font-family: Arial, sans-serif; font-weight: normal;">關於朝誠</h2>
+        <p>我們已在地經營30多年囉，梁老闆是第九屆 桃園市汽車商業同業公會 理事長及現任 中華民國事故車鑑定鑑價協會 理事長，曾兼任中華民國汽車商業同業公會全國聯合會 監事會召集人、桃園市商業會 理事。
+從修車起身的梁老闆，有著多年修護 ‧ 鑑定 ‧ 買賣的故事，正港熱情台南人，歡迎大家來跟我們交朋友哦！</p> <br>
+        <h3>桃園車讚安心好店評鑑內容</h3><br>
+        <ul>
+          <li>實車實價 不定期檢查實際刊登在網路上的車輛</li>
+          <li>使用政府制定的定型化合約書（保證無事故 無泡水 里程數）</li>
+          <li>提供第三方認證書</li>
+          <li>提供車輛保固服務</li>
+        </ul>
+      </div>
+    </div> <!-- end honor-content -->
+  </section>
+  <h2 class="section-title">獲獎事蹟</h2>
+  <div id="awardsSection" class="container" style="margin-top: 1rem;">
+    <div class="row justify-content-center">
+      <div class="col-md-5 mb-4 text-center">
+        <h5 class="mb-3">2021年 第二屆 桃園車讚安心好店 回訪通過</h5>
+        <div class="ratio ratio-16x9">
+          <iframe src="https://www.youtube.com/embed/L3B1RL9BPtA" 
+                  title="2021回訪通過" frameborder="0" 
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                  allowfullscreen></iframe>
+        </div>
+      </div>
+      <div class="col-md-5 mb-4 text-center">
+        <h5 class="mb-3">2020年 第一屆 桃園車讚安心好店 頒獎</h5>
+        <div class="ratio ratio-16x9">
+          <iframe src="https://www.youtube.com/embed/uFOul_Ge9jU" 
+                  title="2020頒獎" frameborder="0" 
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                  allowfullscreen></iframe>
+        </div>
+      </div>
+      <h6 style="text-align: center; margin-top: -1rem;">榮獲金質車商、最佳顧客承諾獎、金質卓越獎、最佳模範店、優質車商、金鑽卓越獎等獎項與客人好評</h6>
+    </div>
+  </div>
+  <div class="text-center mt-3 mb-5">
+    <img src="award.png" alt="獎項總覽" class="img-fluid" style="max-width: 600px;" loading="lazy">
+  </div>
+
+  <!-- 負責人任職經歷 區塊 -->
+  <section id="experienceSection" class="certificate-section fade-up">
+    <div class="container-fluid py-5 bg-light">
+      <h2 class="section-title">負責人任職經歷</h2>
+      <div class="certificate p-3 bg-white rounded shadow-sm">
+        <div class="row align-items-center">
+          <div class="col-md-4 text-center">
+            <img src="headshot.png" alt="負責人大頭照" class="img-fluid rounded-circle">
+          </div>
+          <div class="col-md-8">
+            <ul class="list-unstyled mb-0">
+              <li>中華民國汽車商業同業公會全國聯合會 第六屆 監事會召集人</li>
+              <li>桃園市汽車商業同業公會 第九屆 理事長</li>
+              <li>中華民國事故車鑑定鑑價協會 第二屆 理事長</li>
+              <li>桃園市商業會 第二十五~二十六屆 理事</li>
+              <li>桃園市台南同鄉會 第十八屆 理事</li>
+              <li>桃園市汽車商業同業公會 鑑定顧問</li>
+              <li>中華民國汽車鑑價協會 鑑定師</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- 2019 badge and text block moved above images -->
+  <div class="container-fluid bg-light py-2">
+    <div class="row align-items-center gx-3 justify-content-center">
+      <div class="col-auto">
+        <span class="badge" style="background-color: var(--accent); color: #fff; font-weight: 500; padding: 0.5rem 1rem; font-size: 0.9rem;">
+          2019.09.16
+        </span>
+      </div>
+      <div class="col-auto">
+        <p class="mb-0" style="color: #555; line-height: 1.6; margin: 0;">
+          以中華民國汽車商業同業公會監事會召集人身份，與蔡英文總統會晤，透過產業與政府的交流，願能促使全國汽車產業更加茁壯。
+        </p>
+      </div>
+    </div>
+  </div>
+  <!-- 美化後—負責人照片橫排區塊 -->
+  <div class="container-fluid py-5 bg-light">
+    <div class="d-flex justify-content-center align-items-center gap-1">
+      <div class="p-3 bg-white rounded shadow-sm">
+        <img src="president.png" alt="負責人照片1" class="img-fluid" style="max-height:300px;">
+      </div>
+      <div class="p-3 bg-white rounded shadow-sm">
+        <img src="president2.png" alt="負責人照片2" class="img-fluid" style="max-height:300px;">
+      </div>
+    </div>
+  </div>
+  <!-- 2021 badge and text block moved above images -->
+  <div class="container-fluid bg-light py-2">
+    <div class="row align-items-center gx-3 justify-content-center">
+      <div class="col-auto">
+        <span class="badge" style="background-color: var(--accent); color: #fff; font-weight: 500; padding: 0.5rem 1rem; font-size: 0.9rem;">
+          2021.04.22
+        </span>
+      </div>
+      <div class="col-auto">
+        <p class="mb-0" style="color: #555; line-height: 1.6; margin: 0;">
+          以桃園汽車商業同業公會榮譽理事長身份，與桃園市議長邱奕勝會晤，願能讓桃園中古車市場擁有更完善、安心的消費環境。
+        </p>
+      </div>
+    </div>
+  </div>
+  <!-- 更多—負責人照片橫排區塊 -->
+  <div class="container-fluid py-5 bg-light">
+    <div class="d-flex justify-content-center align-items-center gap-1">
+      <div class="p-3 bg-white rounded shadow-sm">
+        <img src="president3.png" alt="負責人照片3" class="img-fluid" style="max-height:300px;">
+      </div>
+      <div class="p-3 bg-white rounded shadow-sm">
+        <img src="president4.png" alt="負責人照片4" class="img-fluid" style="max-height:300px;">
+      </div>
+    </div>
+  </div>
+
+  <!-- 獎狀並排區塊 -->
+  <div class="container-fluid py-5 bg-light">
+    <div class="d-flex justify-content-center align-items-center gap-4">
+      <div class="p-3 bg-white rounded shadow-sm">
+        <img src="gold1.png" alt="獎狀1" class="img-fluid">
+      </div>
+      <div class="p-3 bg-white rounded shadow-sm">
+        <img src="gold2.png" alt="獎狀2" class="img-fluid">
+      </div>
+      <div class="p-3 bg-white rounded shadow-sm">
+        <img src="gold3.png" alt="獎狀3" class="img-fluid">
+      </div>
+    </div>
+  </div>
+  <!-- 聯絡及接送資訊區塊 -->
+  <div id="contactSection" class="container contact-section">
+    <div class="d-flex justify-content-center align-items-center gap-3 flex-wrap">
+      <div class="text-center">
+        <h3 class="fw-bold mb-3">歡迎來店賞車</h3>
+        <h5 class="text-accent mb-4" style="font-weight: 400;">專車接送服務</h5>
+        <p class="mb-2">桃園高鐵 / 桃園火車站 / 經國轉運站</p>
+        <p class="mb-2">服務專線：03-3577918<br>手機：0989-383-516</a></p>
+        <p class="mb-0">地址：桃園市蘆竹區民權路7-1號</p>
+      </div>
+      <div class="text-center">
+        <img src="navigate.png" alt="導航示意圖" class="img-fluid" style="max-height: 800px; width: auto;">
+      </div>
+    </div>
+  </div>
+  <section class="hero fade-up">
+  </section>
+  <footer class="bg-light py-4">
+    <div class="text-center">
+      <img src="logo.png" alt="朝誠汽車 Logo" style="height: 60px;">
+      <p class="mt-3 mb-1">市話：03-3577918 | 手機：0989-383-516</p>
+      <p class="mb-0">地址：桃園市蘆竹區民權路7-1號</p>
+    </div>
+    <p class="text-center mt-3 mb-0">&copy; 2025 朝誠汽車. All rights reserved.</p>
+  </footer>
+  <div class="floating-buttons">
+    <a href="https://www.facebook.com/chaocheng2016/" target="_blank"><img src="fb.png" alt="Facebook"></a>
+    <a href="https://www.instagram.com/chaocheng.2car/?utm_medium=copy_link" target="_blank"><img src="ig.png" alt="Instagram"></a>
+    <a href="https://line.me/ti/p/~@mok1007v" target="_blank"><img src="line.png" alt="LINE"></a>
+    <a href="tel:0989383516"><img src="call.png" alt="Phone"></a>
+    <a href="https://www.youtube.com/channel/UCYjkB-9_8NCsp8QqBYPzneA" target="_blank"><img src="youtube.png" alt="YouTube"></a>
+    <a href="https://www.google.com.tw/maps/place/%E6%9C%9D%E8%AA%A0%E6%B1%BD%E8%BB%8A-%E6%A1%83%E5%9C%92%E4%B8%AD%E5%8F%A4%E8%BB%8A,%E5%85%8D%E8%B2%BB%E4%BC%B0%E8%BB%8A,%E4%B8%AD%E5%8F%A4%E8%BB%8A%E6%94%B6%E8%B3%BC,%E8%B3%A3%E8%BB%8A,%E5%AE%89%E5%BF%83%E5%BA%97%E5%AE%B6/@25.0380881,121.297438,16.23z/data=!4m5!3m4!1s0x34681fd1d3414efd:0x367461e9720c5b96!8m2!3d25.0356433!4d121.2998228?hl=zh-TW" target="_blank"><img src="map.png" alt="Map"></a>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      // 關於我們連結點擊導向 aboutSection
+      const aboutToggle = document.querySelector('#aboutDropdown');
+      if (aboutToggle) {
+        aboutToggle.addEventListener('click', function (e) {
+          const isExpanded = aboutToggle.getAttribute('aria-expanded') === 'true';
+          if (!isExpanded) {
+            e.preventDefault();
+            window.location.href = '#aboutSection';
+          }
+        });
+      }
+
+      // fade-up 進場動畫 (scroll detection fallback)
+      const fadeEls = document.querySelectorAll('.fade-up');
+      function checkFade() {
+        fadeEls.forEach(el => {
+          const rect = el.getBoundingClientRect();
+          if (rect.top < window.innerHeight && rect.bottom >= 0) {
+            el.classList.add('show');
+          }
+        });
+      }
+      window.addEventListener('scroll', checkFade);
+      window.addEventListener('load', checkFade);
+      // initial check
+      checkFade();
+
+      // 滾動到 contactSection 並置中
+      const contactLink = document.querySelector('a[href="#contactSection"]');
+      if (contactLink) {
+        contactLink.addEventListener('click', function (e) {
+          e.preventDefault();
+          const section = document.querySelector('#contactSection');
+          if (section) {
+            const rect = section.getBoundingClientRect();
+            const offset = rect.top + window.pageYOffset - (window.innerHeight / 2) + (rect.height / 2);
+            window.scrollTo({ top: offset, behavior: 'smooth' });
+          }
+        });
+      }
+
+      // 點擊連結播放動畫後再跳轉
+      document.querySelectorAll('a[href]:not([target="_blank"])').forEach(link => {
+        link.addEventListener('click', function (e) {
+          const href = this.getAttribute('href');
+          if (
+            href.startsWith('#') ||
+            href.startsWith('javascript:') ||
+            this.classList.contains('dropdown-toggle')
+          ) return;
+
+          e.preventDefault();
+          const loader = document.getElementById('page-loader');
+          if (loader) loader.classList.remove('hidden');
+          document.body.classList.remove('loaded');
+          document.body.classList.add('fade-out');
+          setTimeout(() => {
+            window.location.href = href;
+          }, 600);
+        });
+      });
+    });
+    window.addEventListener('load', function () {
+      document.body.classList.add('loaded');
+      const loader = document.getElementById('page-loader');
+      if (loader) {
+        setTimeout(() => {
+          loader.classList.add('hidden');
+        }, 2000); // 等待動畫完成後隱藏
+      }
+    });
+  </script>
+</body>
+</html>

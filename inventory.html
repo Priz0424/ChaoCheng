@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>朝誠汽車 - 最新上架車款</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      padding-top: 80px; /* 確保內容不被固定 header 擋住 */
+    }
+    main { padding:2rem 0; max-width:1200px; margin:0 auto; }
+    h2 { margin-bottom:1rem; color:#004080; }
+    .card {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    .card-img-top {
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      width: 100%;
+      border-radius: 4px;
+    }
+    .card-body {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .card h3 { margin:0.5rem 0; }
+    .card p { margin:0; font-weight:bold; }
+    .empty { text-align:center; color:#777; margin-top:2rem; }
+    .pagination { text-align:center; margin-top:2rem; }
+    .pagination button { margin: 0 0.25rem; padding:0.5rem 1rem; background:#004080; color:#fff; border:none; border-radius:4px; cursor:pointer; }
+    .pagination button:disabled { background:#ccc; cursor:default; }
+    .floating-buttons {
+      position: fixed;
+      top: 35%;
+      right: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 1000;
+    }
+    .floating-buttons a {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #fff;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      transition: transform 0.2s;
+    }
+    .floating-buttons a:hover {
+      transform: scale(1.1);
+    }
+    .floating-buttons img {
+      width: 60%;
+      height: 60%;
+    }
+
+    #page-loader {
+      position: fixed;
+      z-index: 3000;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: opacity 0.6s ease;
+    }
+
+    .loader-content {
+      text-align: center;
+      animation: fadeInUp 0.6s ease;
+    }
+
+    .loader-content img {
+      width: 100px;
+      margin-bottom: 1rem;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+
+    body.loaded #page-loader {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* Modal animation styles */
+    #productModal.showing > div {
+      animation: zoomIn 0.3s ease;
+    }
+
+    #productModal.closing > div {
+      animation: zoomOut 0.3s ease forwards;
+    }
+
+    @keyframes zoomIn {
+      from {
+        opacity: 0;
+        transform: scale(0.8);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes zoomOut {
+      from {
+        opacity: 1;
+        transform: scale(1);
+      }
+      to {
+        opacity: 0;
+        transform: scale(0.8);
+      }
+    }
+
+    /* === Navbar dropdown hover styles === */
+    @media (min-width: 992px) {
+      .navbar .dropdown:hover .dropdown-menu {
+        display: block;
+        margin-top: 0;
+      }
+    }
+
+    .navbar .nav-link:hover,
+    .navbar .dropdown-toggle:hover {
+      background-color: rgba(0, 64, 128, 0.1);
+      border-radius: 5px;
+      transition: background-color 0.2s ease;
+    }
+
+    .navbar .dropdown-menu a:hover {
+      background-color: #f0f0f0;
+    }
+  </style>
+</head>
+<body>
+  <div id="page-loader">
+    <div class="loader-content">
+      <img src="logo.png" alt="朝誠汽車 Logo">
+    </div>
+  </div>
+  <div style="background:#fff;">
+    <header>
+      <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm">
+        <div class="container">
+          <a class="navbar-brand" href="index.html"><img src="logo.png" alt="朝誠汽車 Logo" style="height: 60px;"></a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="index.html#aboutSection" id="aboutDropdown" role="button" data-bs-toggle="dropdown">關於我們</a>
+                <ul class="dropdown-menu" aria-labelledby="aboutDropdown">
+                  <li><a class="dropdown-item" href="index.html#aboutSection">關於朝誠</a></li>
+                  <li><a class="dropdown-item" href="environment.html">公司環境</a></li>
+                </ul>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="servicesDropdown" role="button" data-bs-toggle="dropdown">服務項目</a>
+                <ul class="dropdown-menu" aria-labelledby="servicesDropdown">
+                  <li><a class="dropdown-item" href="buy.html">收購流程</a></li>
+                  <li><a class="dropdown-item" href="sell.html">銷售流程</a></li>
+                  <li><a class="dropdown-item" href="import.html">接單進口流程</a></li>
+                  <li><a class="dropdown-item" href="valuation.html">車禍鑑價求償</a></li>
+                  <li><a class="dropdown-item" href="certification.html">汽車認證</a></li>
+                  <li><a class="dropdown-item" href="insurance.html">保險</a></li>
+                  <li><a class="dropdown-item" href="warranty.html">保固</a></li>
+                  <li><a class="dropdown-item" href="loan.html">貸款</a></li>
+                </ul>
+              </li>
+              <li class="nav-item"><a class="nav-link" href="inventory.html">車輛展示</a></li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="knowledgeDropdown" role="button" data-bs-toggle="dropdown">汽車小知識</a>
+                <ul class="dropdown-menu" aria-labelledby="knowledgeDropdown">
+                  <li><a class="dropdown-item" href="news.html">最新消息</a></li>
+                  <li><a class="dropdown-item" href="trivia.html">冷知識解密</a></li>
+                  <li><a class="dropdown-item" href="appraisal.html">事故車鑑定鑑價</a></li>
+                </ul>
+              </li>
+              <li class="nav-item"><a class="nav-link" href="testimonials.html">客人見證</a></li>
+              <li class="nav-item"><a class="nav-link" href="contact.html">聯絡我們</a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+  </div>
+  <div class="floating-buttons">
+    <a href="https://www.facebook.com/chaocheng2016/" target="_blank"><img src="fb.png" alt="Facebook"></a>
+    <a href="https://www.instagram.com/chaocheng.2car/?utm_medium=copy_link" target="_blank"><img src="ig.png" alt="Instagram"></a>
+    <a href="https://line.me/ti/p/~@mok1007v" target="_blank"><img src="line.png" alt="LINE"></a>
+    <a href="tel:0989383516"><img src="call.png" alt="Phone"></a>
+    <a href="https://www.youtube.com/channel/UCYjkB-9_8NCsp8QqBYPzneA" target="_blank"><img src="youtube.png" alt="YouTube"></a>
+    <a href="https://www.google.com.tw/maps/place/%E6%9C%9D%E8%AA%A0%E6%B1%BD%E8%BB%8A-%E6%A1%83%E5%9C%92%E4%B8%AD%E5%8F%A4%E8%BB%8A" target="_blank"><img src="map.png" alt="Map"></a>
+  </div>
+  <main class="container">
+    <h2>最新上架車款</h2>
+    <!-- 品牌篩選下拉選單 -->
+    <label for="brandFilterSelect" class="form-label fw-bold">品牌篩選：</label>
+    <select id="brandFilterSelect" class="form-select mb-4" style="max-width:300px;">
+      <option value="">全部品牌</option>
+      <optgroup label="國產品牌">
+        <option value="Toyota 豐田">Toyota 豐田</option>
+        <option value="Honda 本田">Honda 本田</option>
+        <option value="Nissan 日產">Nissan 日產</option>
+        <option value="Mazda 馬自達">Mazda 馬自達</option>
+        <option value="Ford 福特">Ford 福特</option>
+        <option value="Mitsubishi 三菱">Mitsubishi 三菱</option>
+        <option value="Suzuki 鈴木">Suzuki 鈴木</option>
+      </optgroup>
+      <optgroup label="進口品牌">
+        <option value="Benz 賓士">Benz 賓士</option>
+        <option value="BMW">BMW</option>
+        <option value="Lexus 凌志">Lexus 凌志</option>
+        <option value="Porsche 保時捷">Porsche 保時捷</option>
+        <option value="Volkswagen 福斯">Volkswagen 福斯</option>
+        <option value="Audi 奧迪">Audi 奧迪</option>
+        <option value="Subaru 速霸陸">Subaru 速霸陸</option>
+        <option value="Hyundai 現代">Hyundai 現代</option>
+        <option value="Kia 起亞">Kia 起亞</option>
+        <option value="Skoda">Skoda</option>
+        <option value="Peugeot">Peugeot</option>
+        <option value="Volvo 富豪">Volvo 富豪</option>
+      </optgroup>
+      <optgroup label="其他">
+        <option value="其他">其他</option>
+      </optgroup>
+    </select>
+    <div class="row" id="inventory"></div>
+    <p class="empty" id="emptyMsg">目前尚無上架車款。</p>
+    <div class="pagination" id="pagination"></div>
+  </main>
+  <!-- 產品彈窗 -->
+  <div id="productModal" onclick="outsideClick(event)" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(0,0,0,0.6); z-index:9999; justify-content:center; align-items:center;">
+    <div style="background:white; padding:2rem; border-radius:8px; max-width:600px; width:90%; max-height:90vh; overflow-y:auto; position:relative;">
+      <button onclick="closeModal()" style="position:absolute; top:10px; right:10px; background:red; color:white; border:none; border-radius:50%; width:30px; height:30px; font-weight:bold;">×</button>
+      <button id="prevModalBtn" class="btn btn-outline-secondary"
+        style="position:absolute; bottom:10px; left:10px;">← 上一個</button>
+      <button id="nextModalBtn" class="btn btn-outline-secondary"
+        style="position:absolute; bottom:10px; right:10px;">下一個 →</button>
+      <h2 id="modalCarName"></h2>
+      <p id="modalBrand"></p>
+      <p id="modalPrice"></p>
+      <img id="modalMainImg" src="" alt="" style="width:100%; max-height:300px; object-fit:contain; border:1px solid #ccc; margin-bottom:1rem;">
+      <div id="modalThumbnails" style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-top:1rem;"></div>
+      <p id="modalDescription" style="margin: 1rem 0 4rem 0; white-space:pre-line;"></p>
+    </div>
+  </div>
+  <footer class="bg-light text-center py-3" style="font-size:0.9rem;">
+    &copy; 2025 朝誠汽車. All rights reserved.
+  </footer>
+<script>
+  const inventoryEl = document.getElementById('inventory');
+  const emptyMsg = document.getElementById('emptyMsg');
+  const paginationEl = document.getElementById('pagination');
+  const ITEMS_PER_PAGE = 8;
+  let currentPage = 1;
+  let cars = [];
+  let currentModalIndex = null;
+
+  function loadCars() {
+    cars = JSON.parse(localStorage.getItem('cars') || '[]');
+    renderPage(currentPage);
+  }
+
+  function renderPage(page) {
+    inventoryEl.innerHTML = '';
+    const selectedBrand = document.getElementById('brandFilterSelect').value;
+    const filteredItems = selectedBrand ? cars.filter(car => car.brand === selectedBrand) : cars;
+    const totalItems = filteredItems.length;
+    const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE) || 1;
+    const start = (page - 1) * ITEMS_PER_PAGE;
+    const end = start + ITEMS_PER_PAGE;
+    const pageItems = filteredItems.slice(start, end);
+
+    if (pageItems.length === 0) {
+      emptyMsg.style.display = 'block';
+    } else {
+      emptyMsg.style.display = 'none';
+      pageItems.forEach((car, i) => {
+        const col = document.createElement('div');
+        col.className = 'col-md-3 mb-4 d-flex';
+        const card = document.createElement('div');
+        card.className = 'card text-center w-100';
+        card.innerHTML = `
+          <img src="${car.coverImgUrl}" alt="${car.name}" class="card-img-top" style="cursor:pointer;" onclick="showModal(${start + i})" onerror="this.src='images/wish.jpg'">
+          <div class="card-body">
+            <h5 class="card-title">${car.name}</h5>
+            <p class="card-text">售價：NT$${Number(car.price).toLocaleString()}</p>
+          </div>
+        `;
+        col.appendChild(card);
+        inventoryEl.appendChild(col);
+      });
+    }
+
+    // Render pagination controls
+    paginationEl.innerHTML = '';
+    const prevBtn = document.createElement('button');
+    prevBtn.textContent = '上一頁';
+    prevBtn.disabled = page <= 1;
+    prevBtn.className = 'btn btn-primary me-2';
+    prevBtn.addEventListener('click', () => changePage(page - 1));
+    const nextBtn = document.createElement('button');
+    nextBtn.textContent = '下一頁';
+    nextBtn.disabled = page >= totalPages;
+    nextBtn.className = 'btn btn-primary ms-2';
+    nextBtn.addEventListener('click', () => changePage(page + 1));
+    const info = document.createElement('span');
+    info.textContent = ` 第 ${page} / ${totalPages} 頁 `;
+    paginationEl.appendChild(prevBtn);
+    paginationEl.appendChild(info);
+    paginationEl.appendChild(nextBtn);
+  }
+
+  function changePage(page) {
+    currentPage = page;
+    renderPage(page);
+  }
+
+</script>
+<script>
+  function showModal(idx) {
+    currentModalIndex = idx;
+    const car = cars[idx];
+    document.getElementById('modalCarName').textContent = car.name;
+    document.getElementById('modalBrand').textContent = '品牌：' + car.brand;
+    document.getElementById('modalPrice').textContent = '售價：NT$' + Number(car.price).toLocaleString();
+    document.getElementById('modalDescription').textContent = car.description || '';
+    document.getElementById('modalMainImg').src = car.coverImgUrl;
+    const thumbs = document.getElementById('modalThumbnails');
+    thumbs.innerHTML = '';
+    const allImgs = [car.coverImgUrl, ...(car.galleryImgs || [])];
+    allImgs.forEach(img => {
+      const thumb = document.createElement('img');
+      thumb.src = img;
+      thumb.style.width = '60px';
+      thumb.style.height = '60px';
+      thumb.style.cursor = 'pointer';
+      thumb.style.border = '1px solid #ccc';
+      thumb.onclick = () => {
+        document.getElementById('modalMainImg').src = img;
+      };
+      thumbs.appendChild(thumb);
+    });
+    const modal = document.getElementById('productModal');
+    modal.style.display = 'flex';
+    modal.classList.remove('closing');
+    // force reflow to restart the animation if toggled rapidly
+    void modal.offsetWidth;
+    modal.classList.add('showing');
+    document.querySelector('#productModal > div').scrollTop = 0;
+
+    const prevBtn = document.getElementById('prevModalBtn');
+    const nextBtn = document.getElementById('nextModalBtn');
+    prevBtn.style.display = (idx > 0) ? 'inline-block' : 'none';
+    nextBtn.style.display = (idx < cars.length - 1) ? 'inline-block' : 'none';
+  }
+
+  function closeModal() {
+    const modal = document.getElementById('productModal');
+    modal.classList.remove('showing');
+    modal.classList.add('closing');
+    setTimeout(() => {
+      modal.style.display = 'none';
+      modal.classList.remove('closing');
+    }, 300);
+  }
+
+  function outsideClick(e) {
+    if (e.target.id === 'productModal') {
+      closeModal();
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    // 初始化
+    loadCars();
+    document.getElementById('brandFilterSelect').addEventListener('change', () => {
+      currentPage = 1;
+      loadCars();
+    });
+
+    // 上下頁按鈕
+    document.getElementById('prevModalBtn').addEventListener('click', () => {
+      if (currentModalIndex > 0) showModal(currentModalIndex - 1);
+    });
+    document.getElementById('nextModalBtn').addEventListener('click', () => {
+      if (currentModalIndex < cars.length - 1) showModal(currentModalIndex + 1);
+    });
+
+    // 鍵盤快捷鍵
+    document.addEventListener('keydown', function (e) {
+      const modal = document.getElementById('productModal');
+      if (modal.style.display === 'flex') {
+        if (e.key === 'ArrowLeft' && currentModalIndex > 0) showModal(currentModalIndex - 1);
+        if (e.key === 'ArrowRight' && currentModalIndex < cars.length - 1) showModal(currentModalIndex + 1);
+        if (e.key === 'Escape') closeModal();
+      }
+    });
+
+    // 導覽連結點擊動畫
+    document.querySelectorAll('a[href]:not([target="_blank"])').forEach(link => {
+      link.addEventListener('click', function (e) {
+        const href = this.getAttribute('href');
+        if (href === 'index.html#aboutSection') {
+          e.preventDefault();
+          const loader = document.getElementById('page-loader');
+          loader.classList.remove('hidden');
+          document.body.classList.remove('loaded');
+          setTimeout(() => {
+            window.location.href = 'index.html#aboutSection';
+          }, 600);
+          return;
+        }
+        if (
+          href.startsWith('#') ||
+          href.startsWith('javascript:') ||
+          this.classList.contains('dropdown-toggle')
+        ) return;
+        e.preventDefault();
+        const loader = document.getElementById('page-loader');
+        loader.classList.remove('hidden');
+        document.body.classList.remove('loaded');
+        setTimeout(() => {
+          window.location.href = href;
+        }, 600);
+      });
+    });
+  });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // 載入後啟動畫面淡出
+  window.addEventListener('load', function () {
+    document.body.classList.add('loaded');
+    const loader = document.getElementById('page-loader');
+    if (loader) {
+      setTimeout(() => {
+        loader.classList.add('hidden');
+      }, 2000); // 等待動畫完成後隱藏
+    }
+  });
+</script>
+</body>
+</html>
