@@ -203,7 +203,7 @@
                 </ul>
               </li>
               <li class="nav-item"><a class="nav-link" href="testimonials.html">客人見證</a></li>
-              <li class="nav-item"><a class="nav-link" href="contact.html">聯絡我們</a></li>
+              <li class="nav-item"><a class="nav-link" href="index.html#contactSection">聯絡我們</a></li>
             </ul>
           </div>
         </div>
@@ -435,6 +435,17 @@
           document.body.classList.remove('loaded');
           setTimeout(() => {
             window.location.href = 'index.html#aboutSection';
+          }, 600);
+          return;
+        }
+        // 新增: index.html#contactSection 的處理
+        if (href === 'index.html#contactSection') {
+          e.preventDefault();
+          const loader = document.getElementById('page-loader');
+          loader.classList.remove('hidden');
+          document.body.classList.remove('loaded');
+          setTimeout(() => {
+            window.location.href = 'index.html#contactSection';
           }, 600);
           return;
         }
