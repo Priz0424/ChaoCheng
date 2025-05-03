@@ -6,6 +6,77 @@
   <title>朝誠汽車 - 最新上架車款</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
+    /* Modal content layout */
+    .modal-content {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      width: 1200px;
+      height: 80vh;
+      overflow-y: auto;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+    /* Certificate modal flex and thumbnail styles */
+    /* .cert-flex { display:flex; height:100%; }
+    .cert-thumbs img {
+      width: 100%;
+      margin-bottom: 8px;
+      cursor: pointer;
+      opacity: 0.6;
+      border: 2px solid transparent;
+      box-sizing: border-box;
+    }
+    .cert-thumbs img.active {
+      opacity: 1;
+      border-color: #004080;
+    }
+    .cert-preview { flex:1; position:relative; overflow:hidden; } */
+    .modal-flex {
+      display: flex;
+      gap: 2rem;
+    }
+    .modal-left {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .modal-left #modalMainImg {
+      width: 100%;
+      max-height: 600px;
+      object-fit: contain;
+      border: 1px solid #ccc;
+      margin-bottom: 1rem;
+    }
+    .modal-left #modalThumbnails {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .modal-right {
+      flex: 1;
+      padding: 0.5rem;
+    }
+    .modal-right h2 {
+      margin-top: 0;
+      color: #004080;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .modal-right p {
+      margin: 0.5rem 0;
+      font-size: 1rem;
+    }
+    .modal-thumbs img {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border: 1px solid #ccc;
+      cursor: pointer;
+    }
     body {
       margin: 0;
       font-family: Arial, sans-serif;
@@ -185,7 +256,6 @@
                 <ul class="dropdown-menu" aria-labelledby="servicesDropdown">
                   <li><a class="dropdown-item" href="buy.html">收購流程</a></li>
                   <li><a class="dropdown-item" href="sell.html">銷售流程</a></li>
-                  <li><a class="dropdown-item" href="import.html">接單進口流程</a></li>
                   <li><a class="dropdown-item" href="valuation.html">車禍鑑價求償</a></li>
                   <li><a class="dropdown-item" href="certification.html">汽車認證</a></li>
                   <li><a class="dropdown-item" href="insurance.html">保險</a></li>
@@ -257,18 +327,41 @@
   </main>
   <!-- 產品彈窗 -->
   <div id="productModal" onclick="outsideClick(event)" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(0,0,0,0.6); z-index:9999; justify-content:center; align-items:center;">
-    <div style="background:white; padding:2rem; border-radius:8px; max-width:600px; width:90%; max-height:90vh; overflow-y:auto; position:relative;">
+    <div class="modal-content">
       <button onclick="closeModal()" style="position:absolute; top:10px; right:10px; background:red; color:white; border:none; border-radius:50%; width:30px; height:30px; font-weight:bold;">×</button>
       <button id="prevModalBtn" class="btn btn-outline-secondary"
         style="position:absolute; bottom:10px; left:10px;">← 上一個</button>
       <button id="nextModalBtn" class="btn btn-outline-secondary"
         style="position:absolute; bottom:10px; right:10px;">下一個 →</button>
-      <h2 id="modalCarName"></h2>
-      <p id="modalBrand"></p>
-      <p id="modalPrice"></p>
-      <img id="modalMainImg" src="" alt="" style="width:100%; max-height:300px; object-fit:contain; border:1px solid #ccc; margin-bottom:1rem;">
-      <div id="modalThumbnails" style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-top:1rem;"></div>
+      <button id="showCertBtn" class="btn btn-outline-secondary"
+        style="position:absolute; bottom:10px; left:50%; transform:translateX(-50%); display:none;">
+        認證書
+      </button>
+      <div class="modal-flex">
+        <!-- Left: main image and thumbnails -->
+        <div class="modal-left">
+          <img id="modalMainImg" src="" alt="">
+          <div id="modalThumbnails" class="modal-thumbs"></div>
+        </div>
+        <!-- Right: title and info -->
+        <div class="modal-right">
+          <h2 id="modalCarName"></h2>
+          <p id="modalBrand"></p>
+          <p id="modalPrice"></p>
+          <p id="modalModel"></p>
+          <p id="modalColor"></p>
+          <p id="modalMileage"></p>
+          <p id="modalDisplacement"></p>
+        </div>
+      </div>
       <p id="modalDescription" style="margin: 1rem 0 4rem 0; white-space:pre-line;"></p>
+    </div>
+  </div>
+  <!-- 認證書彈窗 -->
+  <div id="certModal" onclick="outsideClickCert(event)" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(0,0,0,0.6); z-index:10000; justify-content:center; align-items:center;">
+    <div class="modal-content" style="background:transparent; padding:0; border-radius:0; width:auto; height:80vh; overflow:hidden; position:relative; display:flex; align-items:center; justify-content:center;">
+      <button onclick="closeCertModal()" style="position:absolute; top:10px; right:10px; z-index:2; background:red; width:30px; height:30px;">×</button>
+      <img id="certMainImg" src="" alt="" style="display:block; width:auto; height:auto; max-width:100%; max-height:100%; object-fit:contain; cursor:pointer; user-select:none;" />
     </div>
   </div>
   <footer class="bg-light text-center py-3" style="font-size:0.9rem;">
@@ -345,12 +438,21 @@
 
 </script>
 <script>
+  let showingCert = false;
+  let currentCertImgs = [];
+  let certIndex = 0;
+
   function showModal(idx) {
+    showingCert = false;
     currentModalIndex = idx;
     const car = cars[idx];
     document.getElementById('modalCarName').textContent = car.name;
     document.getElementById('modalBrand').textContent = '品牌：' + car.brand;
     document.getElementById('modalPrice').textContent = '售價：NT$' + Number(car.price).toLocaleString();
+    document.getElementById('modalModel').textContent = '車型：' + (car.model || '');
+    document.getElementById('modalColor').textContent = '顏色：' + (car.color || '');
+    document.getElementById('modalMileage').textContent = '里程：' + (car.mileage || '') + ' km';
+    document.getElementById('modalDisplacement').textContent = '排氣量：' + (car.displacement || '') + ' cc';
     document.getElementById('modalDescription').textContent = car.description || '';
     document.getElementById('modalMainImg').src = car.coverImgUrl;
     const thumbs = document.getElementById('modalThumbnails');
@@ -380,6 +482,71 @@
     const nextBtn = document.getElementById('nextModalBtn');
     prevBtn.style.display = (idx > 0) ? 'inline-block' : 'none';
     nextBtn.style.display = (idx < cars.length - 1) ? 'inline-block' : 'none';
+
+    const showCertBtn = document.getElementById('showCertBtn');
+    if (car.certImgs && car.certImgs.length > 0) {
+      showCertBtn.style.display = 'inline-block';
+      showCertBtn.onclick = () => {
+        showingCert = false;
+        openCertModal(car.certImgs);
+      };
+    } else {
+      showCertBtn.style.display = 'none';
+    }
+  }
+
+  function updateCertView() {
+    // Only update the main certificate image in certModal
+    const certModal = document.getElementById('certModal');
+    if (certModal && certModal.style.display === 'flex') {
+      const imgEl = document.getElementById('certMainImg');
+      imgEl.src = currentCertImgs[certIndex];
+    } else {
+      const imgEl = document.getElementById('modalMainImg');
+      imgEl.src = currentCertImgs[certIndex];
+      const prevBtn = document.getElementById('prevModalBtn');
+      const nextBtn = document.getElementById('nextModalBtn');
+      prevBtn.style.display = certIndex > 0 ? 'inline-block' : 'none';
+      nextBtn.style.display = certIndex < currentCertImgs.length - 1 ? 'inline-block' : 'none';
+    }
+  }
+
+  function openCertModal(imgs) {
+    currentCertImgs = imgs;
+    certIndex = 0;
+    const modal = document.getElementById('certModal');
+    modal.style.display = 'flex';
+    updateCertView();
+    // Enable prev/next by clicking image sides and swipe
+    const preview = document.querySelector('#certModal .cert-preview');
+    // click left/right
+    document.getElementById('certMainImg').onclick = (e) => {
+      const rect = e.target.getBoundingClientRect();
+      if (e.clientX < rect.left + rect.width/2)
+        certIndex = Math.max(0, certIndex-1);
+      else
+        certIndex = Math.min(currentCertImgs.length-1, certIndex+1);
+      updateCertView();
+    };
+    // swipe support
+    let xStart = null;
+    preview.ontouchstart = (e) => { xStart = e.touches[0].clientX; };
+    preview.ontouchend = (e) => {
+      if (!xStart) return;
+      const xEnd = e.changedTouches[0].clientX;
+      const dx = xEnd - xStart;
+      if (Math.abs(dx) > 50) {
+        certIndex = dx>0 ? Math.max(0, certIndex-1) : Math.min(currentCertImgs.length-1, certIndex+1);
+        updateCertView();
+      }
+      xStart = null;
+    };
+  }
+  function closeCertModal() {
+    document.getElementById('certModal').style.display = 'none';
+  }
+  function outsideClickCert(e) {
+    if (e.target.id === 'certModal') closeCertModal();
   }
 
   function closeModal() {
@@ -408,18 +575,50 @@
 
     // 上下頁按鈕
     document.getElementById('prevModalBtn').addEventListener('click', () => {
-      if (currentModalIndex > 0) showModal(currentModalIndex - 1);
+      if (showingCert) {
+        if (certIndex > 0) {
+          certIndex--;
+          updateCertView();
+        }
+      } else if (currentModalIndex > 0) {
+        showModal(currentModalIndex - 1);
+      }
     });
     document.getElementById('nextModalBtn').addEventListener('click', () => {
-      if (currentModalIndex < cars.length - 1) showModal(currentModalIndex + 1);
+      if (showingCert) {
+        if (certIndex < currentCertImgs.length - 1) {
+          certIndex++;
+          updateCertView();
+        }
+      } else if (currentModalIndex < cars.length - 1) {
+        showModal(currentModalIndex + 1);
+      }
     });
 
     // 鍵盤快捷鍵
     document.addEventListener('keydown', function (e) {
       const modal = document.getElementById('productModal');
       if (modal.style.display === 'flex') {
-        if (e.key === 'ArrowLeft' && currentModalIndex > 0) showModal(currentModalIndex - 1);
-        if (e.key === 'ArrowRight' && currentModalIndex < cars.length - 1) showModal(currentModalIndex + 1);
+        if (e.key === 'ArrowLeft') {
+          if (showingCert) {
+            if (certIndex > 0) {
+              certIndex--;
+              updateCertView();
+            }
+          } else if (currentModalIndex > 0) {
+            showModal(currentModalIndex - 1);
+          }
+        }
+        if (e.key === 'ArrowRight') {
+          if (showingCert) {
+            if (certIndex < currentCertImgs.length - 1) {
+              certIndex++;
+              updateCertView();
+            }
+          } else if (currentModalIndex < cars.length - 1) {
+            showModal(currentModalIndex + 1);
+          }
+        }
         if (e.key === 'Escape') closeModal();
       }
     });
