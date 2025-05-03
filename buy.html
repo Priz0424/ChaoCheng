@@ -288,11 +288,13 @@
   <script>
     // 頁面進場動畫
     window.addEventListener('load', function () {
+      window.scrollTo(0, 0);
       document.body.classList.add('loaded');
     });
 
     // 點擊連結時淡出動畫與跳轉
     document.addEventListener("DOMContentLoaded", function () {
+      window.scrollTo(0, 0);
       document.querySelectorAll('a[href]:not([target="_blank"])').forEach(link => {
         link.addEventListener('click', function (e) {
           const href = this.getAttribute('href');
@@ -316,7 +318,7 @@
     </iframe>
   </div>
   <footer>
-    <p>&copy; 2025 朝誠汽車. All rights reserved.</p>
+    <p><br>&copy; 2025 朝誠汽車. All rights reserved.</p>
   </footer>
 <script>
   (function() {
@@ -337,7 +339,7 @@
     setInterval(() => {
       btn.classList.add('pulse');
       setTimeout(() => btn.classList.remove('pulse'), 500);
-    }, 2000);
+    }, 1000);
   })();
 </script>
 </body>
