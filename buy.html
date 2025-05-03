@@ -267,6 +267,23 @@
       });
     });
   </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const canvaContainer = document.querySelector('.mobile-version > div[style*="padding-top"]');
+      if (!canvaContainer) return;
+      let startY = 0;
+      canvaContainer.addEventListener('touchstart', function(e) {
+        startY = e.touches[0].clientY;
+      }, { passive: false });
+      canvaContainer.addEventListener('touchmove', function(e) {
+        e.preventDefault();
+        const currentY = e.touches[0].clientY;
+        const delta = startY - currentY;
+        window.scrollBy(0, delta);
+        startY = currentY;
+      }, { passive: false });
+    });
+  </script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   </div>
   <div class="desktop-version" style="position: relative; width: 100%; height: 0; padding-top: 250.0000%; padding-bottom: 0; box-shadow: 0 2px 8px 0 rgba(63,69,81,0.16); margin-top: 50px; margin-bottom: 0.9em; overflow: hidden; border-radius: 8px; will-change: transform;">
