@@ -143,10 +143,41 @@
       position: relative;
       top: 0;
       width: 100vw;
-      height: 100vh;
+      height: auto;
       overflow: hidden;
       margin-top: 0;
     }
+
+    @media (max-width: 767px) {
+      .carousel {
+        margin-top: 70px; /* push below fixed header */
+        height: auto; /* shortened on mobile */
+      }
+      /* Remove gap below carousel on mobile */
+      .carousel {
+        margin-bottom: 0 !important;
+      }
+      .honor-banner {
+        margin-top: 0 !important;
+      }
+      /* Remove gaps below carousel and around honor section on mobile */
+      #mainCarousel {
+        margin-bottom: 0 !important;
+      }
+      .honor-section {
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+      }
+      h2.section-title {
+        margin-top: 0 !important;
+      }
+      #awardsSection {
+        padding-top: 0 !important;
+        margin-top: 0 !important;
+      }
+    }
+
+    /* Remove gap between carousel and honor banner */
     .floating-buttons {
       position: fixed;
       top: 35%;
@@ -545,7 +576,7 @@
     </div>
   </div>
   <div class="text-center mt-3 mb-5">
-    <img src="award.png" alt="獎項總覽" class="img-fluid" style="max-width: 600px;" loading="lazy">
+    <img src="award.png" alt="獎項總覽" class="img-fluid w-100" loading="lazy">
   </div>
 
   <!-- 負責人任職經歷 區塊 -->
