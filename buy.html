@@ -1,12 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <script>
-    // Detect mobile user agents and redirect to mobile version
-    if (/Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-      window.location.href = 'buy-mobile.html';
-    }
-  </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>朝誠汽車 - 首頁</title>
@@ -17,6 +11,9 @@
   @media (max-width: 767px) {
     .desktop-version { display: none; }
     .mobile-version { display: block; }
+    .mobile-version iframe {
+      pointer-events: none;
+    }
   }
     .fade-out {
       opacity: 0;
@@ -265,23 +262,6 @@
           }, 600);
         });
       });
-    });
-  </script>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const canvaContainer = document.querySelector('.mobile-version > div[style*="padding-top"]');
-      if (!canvaContainer) return;
-      let startY = 0;
-      canvaContainer.addEventListener('touchstart', function(e) {
-        startY = e.touches[0].clientY;
-      }, { passive: false });
-      canvaContainer.addEventListener('touchmove', function(e) {
-        e.preventDefault();
-        const currentY = e.touches[0].clientY;
-        const delta = startY - currentY;
-        window.scrollBy(0, delta);
-        startY = currentY;
-      }, { passive: false });
     });
   </script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
