@@ -8,7 +8,7 @@
   <style>
   .desktop-version { display: block; }
   .mobile-version { display: none; }
-  @media (max-width: 767px) {
+  @media (max-width: 1024px) {
     .desktop-version { display: none; }
     .mobile-version { display: block; }
     .mobile-version iframe,
@@ -162,7 +162,7 @@
     }
 
     /* 保證手機版內容不被 fixed navbar 遮住 */
-    @media (max-width: 767px) {
+    @media (max-width: 1024px) {
       body {
         padding-top: 70px; /* match mobile navbar height */
       }
@@ -322,17 +322,28 @@
   </footer>
 <script>
   (function() {
-    let atTop = true;
     const btn = document.getElementById('scroll-button');
-    btn.addEventListener('click', function() {
-      if (atTop) {
-        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    const delta = window.innerHeight * 0.6;
+
+    // Update button label based on scroll position
+    window.addEventListener('scroll', () => {
+      if (window.innerHeight + window.scrollY >= document.body.scrollHeight) {
         btn.textContent = '向上';
       } else {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
         btn.textContent = '向下';
       }
-      atTop = !atTop;
+    });
+
+    // Initial label
+    btn.textContent = '向下';
+
+    // Click handler
+    btn.addEventListener('click', () => {
+      if (btn.textContent === '向下') {
+        window.scrollBy({ top: delta, behavior: 'smooth' });
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
     });
 
     // Periodic pulse effect every 2 seconds
